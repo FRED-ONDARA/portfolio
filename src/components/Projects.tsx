@@ -41,9 +41,11 @@ function ProjectRow({ index, screenshot }: { index: number; screenshot?: string 
         >
           <MaskLine>{p.title}</MaskLine>
         </h3>
-        <p data-reveal="fade" className="mt-5 max-w-[30rem] text-[17px] leading-relaxed text-ink/80">
-          {p.body}
-        </p>
+        <div data-reveal="fade" className="mt-5 max-w-[32rem] space-y-2 text-[17px] leading-relaxed text-ink/80">
+          {p.body.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
         {href && (
           <a
             data-reveal="fade"

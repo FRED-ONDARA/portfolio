@@ -3,7 +3,8 @@
 import { site } from "@/content/site";
 import type { ResolvedImage } from "@/lib/images";
 import { MaskLine, useReveal } from "./reveal";
-import { Arrow, Button, container, SectionLabel } from "./ui";
+import { brandIcons, BrandSvg } from "./icons";
+import { Button, container, SectionLabel } from "./ui";
 import { Visual } from "./Visual";
 
 const { contact, cv } = site;
@@ -34,24 +35,33 @@ export function Contact({ figure }: { figure: ResolvedImage }) {
           <p data-reveal="fade" className="mt-8 max-w-[32rem] text-[17px] leading-relaxed text-ink/80">
             {contact.line}
           </p>
-          <ul data-reveal="fade" className="mt-8 flex flex-wrap gap-2.5">
-            {contact.links.map((l) => {
-              const external = l.href.startsWith("http");
-              return (
-                <li key={l.label}>
-                  <a
-                    href={l.href}
-                    {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="group inline-flex h-11 items-center gap-2 rounded-full border border-line bg-surface px-5 text-[15px] transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-bg"
-                  >
-                    {l.label}
-                    <Arrow className="text-accent-display transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-          <div data-reveal="fade" className="mt-8">
+          <div data-reveal="fade" className="mt-10 flex flex-wrap items-center gap-3">
+            <ul className="flex flex-wrap gap-3" aria-label="Contact links">
+              {contact.links.map((l) => {
+                const external = l.href.startsWith("http");
+                const icon = brandIcons[l.icon];
+                return (
+                  <li key={l.label}>
+                    <a
+                      href={l.href}
+                      aria-label={external ? `${l.label} (opens in a new tab)` : l.label}
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      style={{ "--brand": icon.brand } as React.CSSProperties}
+                      className="group relative grid h-14 w-14 place-items-center rounded-full border border-line bg-surface text-ink transition-[background-color,border-color,color,transform] duration-300 hover:-translate-y-0.5 hover:border-[var(--brand)] hover:bg-[var(--brand)] hover:text-white"
+                    >
+                      <BrandSvg name={l.icon} className="h-[22px] w-[22px]" />
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute top-full mt-2 font-mono text-[10px] tracking-[0.1em] whitespace-nowrap text-muted uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                      >
+                        {l.label}
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+            <span aria-hidden className="mx-2 hidden h-8 w-px bg-line sm:block" />
             <Button href={cv.designed} download>
               {contact.cvCta}
             </Button>

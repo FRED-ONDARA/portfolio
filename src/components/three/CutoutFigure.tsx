@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
+import { optimizedImage } from "@/lib/image-url";
 import { pointer } from "@/lib/store";
 import { ACCENT } from "./palette";
 import { ContactBlob } from "./Scene";
@@ -108,7 +109,7 @@ export function CutoutFigure({
   shadowStrength = 0.22,
   outlineWorld = 0.022,
 }: Props) {
-  const texture = useTexture(src, (t) => {
+  const texture = useTexture(optimizedImage(src), (t) => {
     const tex = Array.isArray(t) ? t[0] : t;
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 4;

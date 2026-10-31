@@ -23,10 +23,11 @@ A minimalist, interactive 3D portfolio built with Next.js, React Three Fiber and
 
 ## The idea
 
-Photo cutouts of me float in front of a quiet, realistic **solar system**: a glowing sun, six planets on tilted
-orbits and a faint starfield. Further down, Saturn and the Moon drift behind me, Earth turns with a satellite
-in orbit for telecom, and a few **flowers** and drifting petals add a softer touch. Each section is a split
-screen, with a 3D visual on one side and a short explanation on the other. Headlines are set in
+Photo cutouts of me float in a calm 3D space built around one idea: **signal**. The hero opens on a quiet,
+realistic solar system. Further down, each figure stands in a warm **aura** of slowly drifting contour lines,
+on a **dot-field floor** where ripples spread out from my feet like a radio signal. In the telecom tab, a bundle of
+**fiber-optic strands** carries pulses of light behind me, and a few **flowers** add a softer touch. Each section is a
+split screen, with a 3D visual on one side and a short explanation on the other. Headlines are set in
 **Playfair Display**, with one italic orange line.
 
 <div align="center">
@@ -39,10 +40,10 @@ screen, with a 3D visual on one side and a short explanation on the other. Headl
 <table>
   <tr>
     <td width="50%"><img src="docs/screenshots/hero-dark.jpg" alt="Hero in dark mode with the solar system against a starfield" /><br/><sub><b>Dark mode</b>: the solar system against a starfield</sub></td>
-    <td width="50%"><img src="docs/screenshots/about.jpg" alt="About section with Saturn, the Moon and flowers" /><br/><sub><b>01 About</b>: Saturn, the Moon and a few flowers</sub></td>
+    <td width="50%"><img src="docs/screenshots/about.jpg" alt="About section with Saturn, the Moon and flowers" /><br/><sub><b>01 About</b>: contour aura, signal floor and flowers</sub></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/focus.jpg" alt="Focus section with tabs" /><br/><sub><b>02 Focus</b>: tabs swap the copy, the figure and the 3D object</sub></td>
+    <td><img src="docs/screenshots/focus.jpg" alt="Focus section with tabs" /><br/><sub><b>02 Focus</b>: tabs swap the copy, the figure and the 3D object (fiber strands, robot arm, code window)</sub></td>
     <td><img src="docs/screenshots/projects.jpg" alt="Globyx project with a wireframe globe" /><br/><sub><b>03 Projects</b>: Globyx, shown as a realistic Earth with connection arcs</sub></td>
   </tr>
   <tr>
@@ -50,7 +51,7 @@ screen, with a 3D visual on one side and a short explanation on the other. Headl
     <td><img src="docs/screenshots/project-arm.jpg" alt="Articulated robot arm" /><br/><sub>Hiwonder: an articulated arm built from primitives</sub></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/contact.jpg" alt="Contact section" /><br/><sub><b>04 Contact</b>: the Moon, signal rings and a small bouquet</sub></td>
+    <td><img src="docs/screenshots/contact.jpg" alt="Contact section" /><br/><sub><b>04 Contact</b>: brand-icon links, CV download and a small bouquet</sub></td>
     <td><img src="docs/screenshots/menu.jpg" alt="Full-screen menu overlay" /><br/><sub>Full-screen menu with numbered links and theme toggle</sub></td>
   </tr>
 </table>
@@ -67,10 +68,12 @@ screen, with a 3D visual on one side and a short explanation on the other. Headl
 - **One shared WebGL canvas.** Each section's image slot is a drei `<View>`, so every scene renders into a single GPU context, clipped to its box.
 - **Cutout shader.** Each photo is a plane at its natural aspect ratio. A custom shader draws an alpha-edge outline (white, or orange on hover) and a soft drop shadow; a contact shadow sits underneath.
 - **Alive but calm.** Figures float, tilt toward the cursor (or follow device orientation on phones) and scale up slightly on hover. The camera glides with scroll through GSAP ScrollTrigger, and Lenis smooths the scroll.
-- **A procedural cosmos.** The sun has an animated plasma shader and a soft corona. The planets' textures (Earth's continents and clouds, Jupiter's bands, Saturn's rings, the Moon's craters) are generated in code from noise, so there are no image downloads. The planets are lit by the sun, so each shows a day and a night side.
-- **Flowers, sparingly.** Hand-built 3D blossoms with cupped, curled petals, drifting petals in About and Contact, and a line-drawn flower in the footer.
+- **Signal backdrops.** Three custom shaders, one draw call each: a contour aura (noise isolines around a warm glow), a dot floor whose ripples spread from the figure, and fiber strands with travelling light pulses. All of them fade out before their edges, so nothing is clipped.
+- **A procedural solar system in the hero.** The sun has an animated plasma shader and a soft corona. The planet textures are generated in code, and the planets are lit by the sun, so each shows a day and a night side.
+- **Flowers, sparingly.** Hand-built 3D blossoms with cupped, curled petals in About and Contact, plus a line-drawn flower in the footer.
+- **Real brand icons** for Gmail, WhatsApp, LinkedIn and GitHub, each filling with its brand colour on hover.
 - **Generated project visuals.** An Earth with connection arcs, a rover, a robot arm and a typing terminal, all built from primitives, so there are no heavy models to download.
-- **Fast first paint.** three.js loads only after the first interaction, and each scene is built only as its section approaches. Until then, a static cutout with a CSS float stands in.
+- **Fast first paint.** The initial page is about 500 KB. three.js loads only after the first interaction, and each scene is built only as its section approaches. 3D textures arrive as compressed WebP through Next's image optimizer (the contact cutout drops from 558 KB to 43 KB). Repeat visits in a session get a quick intro.
 - **Accessible.** Semantic landmarks, keyboard-operable tabs (arrow keys) and menu (focus trap, `Esc` closes), visible focus states, and `prefers-reduced-motion` support. Without WebGL, static images are shown instead.
 - **Editable content.** All copy lives in one file, and all images are mapped in another.
 
@@ -100,6 +103,7 @@ npm run dev        # http://localhost:3000
 | `npm run dev` | Start the dev server |
 | `npm run build` | Production build |
 | `npm start` | Serve the production build |
+| `npm run preview` | Build and serve the production version (fast, like the live site) |
 | `npm run lint` | ESLint |
 
 ## Editing content
@@ -165,9 +169,10 @@ src/
 │     ├─ ViewSlot       anchors a scene to a section's slot
 │     ├─ SlotScene      picks the scene per section
 │     ├─ CutoutFigure   reusable 3D cutout (outline + shadow shader)
-│     ├─ Scene          studio lights, parallax, signal rings, fiber lines
-│     ├─ cosmos         sun, planets, Earth, satellite, starfield, solar system
-│     ├─ flowers        blossoms, bouquet, drifting petals
+│     ├─ Scene          studio lights, parallax, contact shadow
+│     ├─ backdrops      contour aura, signal floor, fiber bundle
+│     ├─ cosmos         sun, planets, Earth, starfield, solar system
+│     ├─ flowers        blossoms and bouquet
 │     ├─ textures       procedural planet, cloud, ring and glow textures
 │     └─ visuals        Earth globe, rover, robot arm, terminal, code window
 └─ lib/                 stores, hooks, scroll, GSAP setup, image resolver
@@ -182,8 +187,8 @@ Lighthouse on the production build, run locally:
 
 | | Performance | Accessibility | Best Practices | SEO |
 | --- | --- | --- | --- | --- |
-| Desktop | 93–96 | 100 | 100 | 100 |
-| Mobile (simulated slow 4G) | ~67–70 | 100 | 100 | 100 |
+| Desktop | 93 | 100 | 100 | 100 |
+| Mobile (simulated slow 4G) | ~65–70 | 100 | 100 | 100 |
 
 On mobile, Lighthouse's simulated throttling counts the JavaScript for the intro loader and animations against
 the first paint. A direct 4× CPU-throttled measurement painted the hero at about 1.3 s.

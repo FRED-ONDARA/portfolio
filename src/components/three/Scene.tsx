@@ -2,10 +2,8 @@
 
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Line } from "@react-three/drei";
 import * as THREE from "three";
 import { pointer } from "@/lib/store";
-import { ACCENT, type ScenePalette } from "./palette";
 
 // Shared studio lighting: key, soft fill and a rim light from behind.
 // `dim` lowers it so a scene's own light (the sun) shapes the planets' day and night sides.
@@ -70,105 +68,5 @@ export function ContactBlob({
       <planeGeometry args={[width, depth]} />
       <meshBasicMaterial map={texture} transparent opacity={opacity} depthWrite={false} toneMapped={false} />
     </mesh>
-  );
-}
-
-// Slowly expanding concentric "signal" rings in the accent color.
-export function SignalRings({
-  count = 3,
-  speed = 0.22,
-  maxScale = 1.55,
-  opacity = 0.45,
-  reduced = false,
-  position = [0, 0.4, -1.2] as [number, number, number],
-}) {
-  const rings = useRef<THREE.Mesh[]>([]);
-  useFrame((state) => {
-    const t = reduced ? 0.35 : state.clock.elapsedTime * speed;
-    rings.current.forEach((m, i) => {
-      if (!m) return;
-      const f = (t + i / count) % 1;
-      const s = 0.5 + f * maxScale;
-      m.scale.setScalar(s);
-      (m.material as THREE.MeshBasicMaterial).opacity = Math.sin(f * Math.PI) * opacity;
-    });
-  });
-  return (
-    <group position={position}>
-      {Array.from({ length: count }, (_, i) => (
-        <mesh
-          key={i}
-          ref={(m) => {
-            if (m) rings.current[i] = m;
-          }}
-        >
-          <ringGeometry args={[0.985, 1, 128]} />
-          <meshBasicMaterial color={ACCENT} transparent opacity={0} depthWrite={false} toneMapped={false} />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
-const fiberPaths: [number, number, number][][] = [
-  [
-    [-2.6, -1.2, -1.4],
-    [-1.2, -0.3, -1.6],
-    [0.2, -0.8, -1.9],
-    [1.6, 0.4, -1.6],
-    [2.8, 0.1, -1.4],
-  ],
-  [
-    [-2.8, 0.9, -2.2],
-    [-1.4, 1.5, -2.0],
-    [0.4, 1.0, -2.3],
-    [1.8, 1.7, -2.1],
-    [2.9, 1.2, -2.0],
-  ],
-];
-
-// Thin fiber-optic light lines with pulses travelling along them.
-export function FiberLines({
-  palette,
-  reduced = false,
-  opacity = 0.6,
-}: {
-  palette: ScenePalette;
-  reduced?: boolean;
-  opacity?: number;
-}) {
-  const curves = useMemo(
-    () => fiberPaths.map((p) => new THREE.CatmullRomCurve3(p.map((v) => new THREE.Vector3(...v))).getPoints(80)),
-    [],
-  );
-  const pulses = useRef<{ material: { dashOffset: number } }[]>([]);
-  useFrame((_, dt) => {
-    if (reduced) return;
-    pulses.current.forEach((l, i) => {
-      if (l) l.material.dashOffset -= dt * (0.35 + i * 0.12);
-    });
-  });
-  return (
-    <group>
-      {curves.map((points, i) => (
-        <group key={i}>
-          <Line points={points} color={palette.line} lineWidth={1} transparent opacity={0.5} />
-          <Line
-            ref={(l) => {
-              if (l) pulses.current[i] = l as unknown as { material: { dashOffset: number } };
-            }}
-            points={points}
-            color={ACCENT}
-            lineWidth={2}
-            dashed
-            dashSize={0.35}
-            gapSize={2.4}
-            transparent
-            opacity={opacity}
-            toneMapped={false}
-          />
-        </group>
-      ))}
-    </group>
   );
 }

@@ -13,12 +13,25 @@ const DURATION = 1200;
 export function Loader() {
   const reduced = useReducedMotion();
   const [visible, setVisible] = useState(true);
+  // Full intro once per visit; repeat views in the same session get a quick one.
+  const [seen] = useState(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return sessionStorage.getItem("intro-seen") === "1";
+    } catch {
+      return false;
+    }
+  });
+  const quick = reduced || seen;
   const counter = useRef<HTMLSpanElement>(null);
   const bar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     lockScroll(true);
-    const duration = reduced ? 300 : DURATION;
+    try {
+      sessionStorage.setItem("intro-seen", "1");
+    } catch {}
+    const duration = quick ? 250 : DURATION;
     const start = performance.now();
     let raf = 0;
     // Writes straight to the DOM each frame so the count never re-renders React.
@@ -40,7 +53,7 @@ export function Loader() {
       cancelAnimationFrame(raf);
       lockScroll(false);
     };
-  }, [reduced]);
+  }, [quick]);
 
   return (
     <AnimatePresence>
@@ -48,8 +61,8 @@ export function Loader() {
         <motion.div
           aria-hidden
           className="fixed inset-0 z-[60] hidden flex-col justify-between bg-ink p-5 text-bg md:p-10 [.js_&]:flex"
-          exit={reduced ? { opacity: 0 } : { y: "-100%" }}
-          transition={{ duration: reduced ? 0.2 : 0.9, ease: [0.76, 0, 0.24, 1] }}
+          exit={quick ? { opacity: 0 } : { y: "-100%" }}
+          transition={{ duration: quick ? 0.25 : 0.9, ease: [0.76, 0, 0.24, 1] }}
         >
           <div className="flex justify-between font-mono text-[12px] uppercase tracking-[0.12em] opacity-70">
             <span>{site.initials}</span>

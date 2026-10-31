@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Line, RoundedBox, useTexture } from "@react-three/drei";
 import * as THREE from "three";
+import { optimizedImage } from "@/lib/image-url";
 import { pointer } from "@/lib/store";
 import { ACCENT, type ScenePalette } from "./palette";
 import { Earth } from "./cosmos";
@@ -78,7 +79,7 @@ export function Globe({ palette, reduced }: VisualProps) {
         <group ref={spin}>
           {/* Earth turns with the arcs, so it doesn't spin on its own here. */}
           <group scale={(R * 0.99) / 0.9}>
-            <Earth radius={0.9} reduced textureSize={512} />
+            <Earth radius={0.9} reduced textureSize={384} />
           </group>
           {arcPoints.map((pts, i) => (
             <group key={i}>
@@ -447,7 +448,7 @@ const CODE_LINES: { tokens: [string, string][]; indent: number }[] = [
   {
     indent: 3,
     tokens: [
-      ["<SignalRings ", "t"],
+      ["<Aura ", "t"],
       ["/>", "t"],
     ],
   },
@@ -507,7 +508,7 @@ export function CodeWindow({ reduced, theme }: VisualProps & { theme: "light" | 
 /* ---------- A real screenshot on a floating plane ---------- */
 
 export function ScreenshotPlane({ src, reduced }: { src: string; reduced: boolean }) {
-  const texture = useTexture(src, (t) => {
+  const texture = useTexture(optimizedImage(src, 1200), (t) => {
     const tex = Array.isArray(t) ? t[0] : t;
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 4;

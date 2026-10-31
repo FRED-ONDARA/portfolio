@@ -2,7 +2,7 @@
 
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Line, RoundedBox } from "@react-three/drei";
+import { Line } from "@react-three/drei";
 import * as THREE from "three";
 import { pointer } from "@/lib/store";
 import type { ScenePalette } from "./palette";
@@ -197,76 +197,6 @@ export function Earth({
         <sphereGeometry args={[radius, 48, 48]} />
         <primitive object={atmosphere} attach="material" />
       </mesh>
-    </group>
-  );
-}
-
-/* ---------- A small communications satellite ---------- */
-
-export function Satellite({ scale = 1 }: { scale?: number }) {
-  return (
-    <group scale={scale}>
-      <RoundedBox args={[0.16, 0.12, 0.12]} radius={0.015} smoothness={2}>
-        <meshStandardMaterial color="#c9b27a" metalness={0.6} roughness={0.35} />
-      </RoundedBox>
-      {[-1, 1].map((s) => (
-        <group key={s} position={[s * 0.26, 0, 0]}>
-          <mesh>
-            <boxGeometry args={[0.34, 0.006, 0.13]} />
-            <meshStandardMaterial color="#2b3440" metalness={0.5} roughness={0.3} />
-          </mesh>
-          <mesh position={[-s * 0.18, 0, 0]}>
-            <boxGeometry args={[0.04, 0.008, 0.01]} />
-            <meshStandardMaterial color="#9a9a9a" />
-          </mesh>
-        </group>
-      ))}
-      <mesh position={[0, -0.1, 0]} rotation={[Math.PI, 0, 0]}>
-        <coneGeometry args={[0.06, 0.05, 24, 1, true]} />
-        <meshStandardMaterial color="#e8e4dc" side={THREE.DoubleSide} roughness={0.5} />
-      </mesh>
-    </group>
-  );
-}
-
-/** Earth with a satellite on an inclined orbit. Used for the telecom focus tab. */
-export function EarthOrbit({ reduced, palette }: { reduced: boolean; palette: ScenePalette }) {
-  const sat = useRef<THREE.Group>(null);
-  const R = 1.35;
-  const orbitPoints = useMemo(
-    () =>
-      Array.from(
-        { length: 129 },
-        (_, i) => new THREE.Vector3(Math.cos((i / 128) * Math.PI * 2) * R, 0, Math.sin((i / 128) * Math.PI * 2) * R),
-      ),
-    [],
-  );
-  const angle = useRef(0.6);
-  useFrame((_, dt) => {
-    if (!reduced) angle.current += dt * 0.35;
-    const s = sat.current;
-    if (!s) return;
-    s.position.set(Math.cos(angle.current) * R, 0, Math.sin(angle.current) * R);
-    s.lookAt(0, 0, 0);
-  });
-  return (
-    <group>
-      <Earth radius={0.8} reduced={reduced} textureSize={256} />
-      <group rotation={[0.45, 0, -0.35]}>
-        <Line
-          points={orbitPoints}
-          color={palette.line}
-          lineWidth={1}
-          transparent
-          opacity={0.6}
-          dashed
-          dashSize={0.06}
-          gapSize={0.05}
-        />
-        <group ref={sat}>
-          <Satellite scale={0.9} />
-        </group>
-      </group>
     </group>
   );
 }

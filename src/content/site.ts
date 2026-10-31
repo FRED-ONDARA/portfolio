@@ -77,26 +77,38 @@ export const site = {
         slug: "globyx",
         title: "Globyx",
         tag: "FOUNDER",
-        body: "My business. Virtual phone numbers in 60+ countries and residential, mobile, ISP and datacenter proxies, managed from one wallet and one dashboard.",
+        body: [
+          "My own business: an online platform offering virtual phone numbers in 60+ countries, plus residential, mobile, ISP and datacenter proxies.",
+          "Customers manage all of it from a single wallet and one dashboard.",
+        ],
         href: "https://globyxlimited2026.vercel.app/",
       },
       {
         slug: "matlab-coppeliasim",
         title: "MATLAB-CoppeliaSim Fusion",
         tag: "ROBOTICS",
-        body: "Fuzzy logic control for Pioneer P3DX robots using MATLAB integration and Lua scripting.",
+        body: [
+          "Fuzzy logic control for Pioneer P3DX robots, with MATLAB driving a CoppeliaSim simulation through Lua scripting.",
+          "The result is a real-time robotics control system, tested in simulation before it touches hardware.",
+        ],
       },
       {
         slug: "hiwonder-arms",
         title: "Hiwonder Robotic Arms",
         tag: "EMBEDDED",
-        body: "Programmable xArm1S and LX-225 servo arm experiments using Arduino and Python.",
+        body: [
+          "Programmable experiments on the Hiwonder xArm1S and LX-225 serial bus servos, written in Arduino and Python.",
+          "Hands-on work across hardware and firmware, including debugging the serial bus servo platform.",
+        ],
       },
       {
         slug: "terminal-bench-3",
         title: "Terminal-Bench 3",
         tag: "AI",
-        body: "A benchmark project that tests AI agents on realistic command-line tasks, built with Claude Fable 5.1.",
+        body: [
+          "Terminal-Bench 3 is a benchmark that tests AI agents on hard, realistic command-line tasks.",
+          "I worked on a project for it, developed with Claude Fable 5.1 as the AI coding agent.",
+        ],
       },
     ],
     more: {
@@ -114,10 +126,11 @@ export const site = {
     heading: ["Let's", "connect."],
     line: "Looking for a telecommunications team to learn from and contribute to. Say hello.",
     links: [
-      { label: "Email", href: "mailto:fredrickondara01@gmail.com" },
-      { label: "WhatsApp", href: "https://wa.me/254703589175" },
-      { label: "LinkedIn", href: "http://www.linkedin.com/in/fredrick-ondara-617570339" },
-      { label: "GitHub", href: "https://github.com/Fredrick-Ondara-Onenga" },
+      // `icon` picks the brand icon from src/components/icons.tsx.
+      { label: "Email", icon: "email", href: "mailto:fredrickondara01@gmail.com" },
+      { label: "WhatsApp", icon: "whatsapp", href: "https://wa.me/254703589175" },
+      { label: "LinkedIn", icon: "linkedin", href: "http://www.linkedin.com/in/fredrick-ondara-617570339" },
+      { label: "GitHub", icon: "github", href: "https://github.com/Fredrick-Ondara-Onenga" },
     ],
     cvCta: "DOWNLOAD CV",
   },
