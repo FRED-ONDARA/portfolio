@@ -6,6 +6,7 @@ import { Line, RoundedBox, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { pointer } from "@/lib/store";
 import { ACCENT, type ScenePalette } from "./palette";
+import { Earth } from "./cosmos";
 import { ContactBlob, getBlobTexture } from "./Scene";
 
 type VisualProps = { palette: ScenePalette; reduced: boolean };
@@ -24,7 +25,7 @@ function useFloat(reduced: boolean, amount = 0.25) {
   return ref;
 }
 
-/* ---------- Globyx: wireframe globe, orbiting dots, connection arcs ---------- */
+/* ---------- Globyx: realistic Earth, orbiting dots, connection arcs ---------- */
 
 function latLng(lat: number, lng: number, r: number) {
   const phi = (90 - lat) * (Math.PI / 180);
@@ -43,22 +44,7 @@ export function Globe({ palette, reduced }: VisualProps) {
   const arcs = useRef<{ material: { dashOffset: number } }[]>([]);
   const R = 1.15;
 
-  const { meridians, parallels, arcPoints } = useMemo(() => {
-    const circle = (fn: (a: number) => THREE.Vector3) =>
-      Array.from({ length: 97 }, (_, i) => fn((i / 96) * Math.PI * 2));
-    const meridians = Array.from({ length: 8 }, (_, k) =>
-      circle((a) =>
-        new THREE.Vector3(Math.cos(a) * R, Math.sin(a) * R, 0).applyAxisAngle(
-          new THREE.Vector3(0, 1, 0),
-          (k / 8) * Math.PI,
-        ),
-      ),
-    );
-    const parallels = [-60, -30, 0, 30, 60].map((lat) => {
-      const y = Math.sin((lat * Math.PI) / 180) * R;
-      const r = Math.cos((lat * Math.PI) / 180) * R;
-      return circle((a) => new THREE.Vector3(Math.cos(a) * r, y, Math.sin(a) * r));
-    });
+  const arcPoints = useMemo(() => {
     // Abstract connections between points on the sphere (not real routes).
     const pairs: [number, number, number, number][] = [
       [-1.3, 36.8, 51.5, -0.1],
@@ -67,7 +53,7 @@ export function Globe({ palette, reduced }: VisualProps) {
       [-1.3, 36.8, -33.9, 18.4],
       [51.5, -0.1, 35.7, 139.7],
     ];
-    const arcPoints = pairs.map(([a, b, c, d]) => {
+    return pairs.map(([a, b, c, d]) => {
       const p0 = latLng(a, b, R);
       const p2 = latLng(c, d, R);
       const mid = p0.clone().add(p2).multiplyScalar(0.5);
@@ -75,7 +61,6 @@ export function Globe({ palette, reduced }: VisualProps) {
       mid.normalize().multiplyScalar(R * lift);
       return new THREE.QuadraticBezierCurve3(p0, mid, p2).getPoints(48);
     });
-    return { meridians, parallels, arcPoints };
   }, []);
 
   useFrame((_, dt) => {
@@ -91,9 +76,10 @@ export function Globe({ palette, reduced }: VisualProps) {
     <group ref={float}>
       <group rotation={[0.35, 0, -0.2]}>
         <group ref={spin}>
-          {[...meridians, ...parallels].map((pts, i) => (
-            <Line key={i} points={pts} color={palette.line} lineWidth={1} transparent opacity={0.7} />
-          ))}
+          {/* Earth turns with the arcs, so it doesn't spin on its own here. */}
+          <group scale={(R * 0.99) / 0.9}>
+            <Earth radius={0.9} reduced textureSize={512} />
+          </group>
           {arcPoints.map((pts, i) => (
             <group key={i}>
               <Line points={pts} color={ACCENT} lineWidth={1} transparent opacity={0.25} toneMapped={false} />
@@ -119,10 +105,6 @@ export function Globe({ palette, reduced }: VisualProps) {
             <meshBasicMaterial color={ACCENT} toneMapped={false} />
           </mesh>
         </group>
-        <mesh>
-          <sphereGeometry args={[R * 0.985, 48, 48]} />
-          <meshStandardMaterial color={palette.solid} roughness={0.9} transparent opacity={0.35} />
-        </mesh>
         <group ref={orbit} rotation={[0.5, 0, 0.3]}>
           {[0, 1, 2, 3].map((i) => {
             const a = (i / 4) * Math.PI * 2;

@@ -54,10 +54,10 @@ export function Focus({ figures }: { figures: Record<FocusId, ResolvedImage> }) 
           <SectionLabel number={focus.number} label={focus.label} />
           <h2
             id="focus-title"
-            className="mt-6 text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.95] font-semibold tracking-[-0.04em]"
+            className="mt-6 text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.95] font-display font-medium tracking-[-0.02em]"
           >
             {focus.heading.map((l, i) => (
-              <MaskLine key={l} className={i === 1 ? "text-accent-display" : ""}>
+              <MaskLine key={l} className={i === 1 ? "text-accent-display italic" : ""}>
                 {l}
               </MaskLine>
             ))}
@@ -89,7 +89,7 @@ export function Focus({ figures }: { figures: Record<FocusId, ResolvedImage> }) 
                   <span className={`font-mono text-[12px] ${selected ? "text-accent-text" : ""}`}>
                     {focus.number}.{i + 1}
                   </span>
-                  <span className="text-[clamp(1.35rem,2.4vw,2rem)] font-medium tracking-[-0.03em]">{t.title}</span>
+                  <span className="text-[clamp(1.35rem,2.4vw,2rem)] font-display tracking-[-0.01em]">{t.title}</span>
                   <span
                     aria-hidden
                     className={`absolute bottom-[-1px] left-0 h-[2px] bg-accent transition-all duration-500 ${selected ? "w-full" : "w-0"}`}

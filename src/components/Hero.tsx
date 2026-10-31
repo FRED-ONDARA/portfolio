@@ -25,12 +25,12 @@ export function Hero({ figure }: { figure: ResolvedImage }) {
         </p>
         <h1
           id="hero-title"
-          className="mt-6 text-[clamp(3.4rem,10.5vw,9.5rem)] leading-[0.9] font-semibold tracking-[-0.045em]"
+          className="mt-6 text-[clamp(3.2rem,9vw,8.4rem)] leading-[0.95] font-display font-medium tracking-[-0.02em]"
         >
           {hero.headline.map((line, i) => (
             <MaskLine key={line.text} className={i === 1 ? "pl-[0.9em]" : i === 2 ? "pl-[0.35em]" : ""}>
               {"emphasis" in line && line.emphasis ? (
-                <em className="text-accent-display not-italic">{line.text}</em>
+                <em className="text-accent-display italic">{line.text}</em>
               ) : (
                 line.text
               )}

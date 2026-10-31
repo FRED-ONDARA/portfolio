@@ -23,10 +23,10 @@ export function About({ figure }: { figure: ResolvedImage }) {
           <SectionLabel number={about.number} label={about.label} />
           <h2
             id="about-title"
-            className="mt-6 text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.95] font-semibold tracking-[-0.04em]"
+            className="mt-6 text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.95] font-display font-medium tracking-[-0.02em]"
           >
             {about.heading.map((l, i) => (
-              <MaskLine key={l} className={i === 1 ? "text-accent-display" : ""}>
+              <MaskLine key={l} className={i === 1 ? "text-accent-display italic" : ""}>
                 {l}
               </MaskLine>
             ))}
@@ -40,7 +40,7 @@ export function About({ figure }: { figure: ResolvedImage }) {
                 <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
                   <span className="text-accent-text">0{i + 1}</span> · {f.label}
                 </span>
-                <span className="text-lg leading-tight font-medium tracking-[-0.02em]">{f.title}</span>
+                <span className="font-display text-xl leading-tight tracking-[-0.01em]">{f.title}</span>
               </li>
             ))}
           </ul>

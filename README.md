@@ -15,7 +15,7 @@ A minimalist, interactive 3D portfolio built with Next.js, React Three Fiber and
 
 <br/>
 
-<img src="docs/screenshots/hero-light.jpg" alt="Portfolio hero: the headline 'Building what connects.' beside a floating 3D cutout of Fredrick with orange signal rings" width="100%" />
+<img src="docs/screenshots/hero-light.jpg" alt="Portfolio hero: the headline 'Building what connects.' beside a floating 3D cutout of Fredrick in front of an orbiting solar system" width="100%" />
 
 </div>
 
@@ -23,9 +23,11 @@ A minimalist, interactive 3D portfolio built with Next.js, React Three Fiber and
 
 ## The idea
 
-Photo cutouts of me float in a calm, minimal 3D space: an off-white studio, a few rounded shapes, and faint
-orange **signal rings and fiber-optic light lines**, a nod to the telecom career I'm working towards. Each
-section is a split screen, with a 3D visual on one side and a short explanation on the other.
+Photo cutouts of me float in front of a quiet, realistic **solar system**: a glowing sun, six planets on tilted
+orbits and a faint starfield. Further down, Saturn and the Moon drift behind me, Earth turns with a satellite
+in orbit for telecom, and a few **flowers** and drifting petals add a softer touch. Each section is a split
+screen, with a 3D visual on one side and a short explanation on the other. Headlines are set in
+**Playfair Display**, with one italic orange line.
 
 <div align="center">
   <img src="docs/cutouts.jpg" alt="The six transparent cutouts used across the site" width="100%" />
@@ -36,19 +38,19 @@ section is a split screen, with a 3D visual on one side and a short explanation 
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/hero-dark.jpg" alt="Hero in dark mode" /><br/><sub><b>Dark mode</b>: same accent, inverted canvas</sub></td>
-    <td width="50%"><img src="docs/screenshots/about.jpg" alt="About section" /><br/><sub><b>01 About</b>: fact tiles beside the cutout</sub></td>
+    <td width="50%"><img src="docs/screenshots/hero-dark.jpg" alt="Hero in dark mode with the solar system against a starfield" /><br/><sub><b>Dark mode</b>: the solar system against a starfield</sub></td>
+    <td width="50%"><img src="docs/screenshots/about.jpg" alt="About section with Saturn, the Moon and flowers" /><br/><sub><b>01 About</b>: Saturn, the Moon and a few flowers</sub></td>
   </tr>
   <tr>
     <td><img src="docs/screenshots/focus.jpg" alt="Focus section with tabs" /><br/><sub><b>02 Focus</b>: tabs swap the copy, the figure and the 3D object</sub></td>
-    <td><img src="docs/screenshots/projects.jpg" alt="Globyx project with a wireframe globe" /><br/><sub><b>03 Projects</b>: Globyx, shown as a wireframe globe with connection arcs</sub></td>
+    <td><img src="docs/screenshots/projects.jpg" alt="Globyx project with a wireframe globe" /><br/><sub><b>03 Projects</b>: Globyx, shown as a realistic Earth with connection arcs</sub></td>
   </tr>
   <tr>
     <td><img src="docs/screenshots/project-robot.jpg" alt="Wheeled robot following a glowing path" /><br/><sub>MATLAB–CoppeliaSim: a rover following a glowing path</sub></td>
     <td><img src="docs/screenshots/project-arm.jpg" alt="Articulated robot arm" /><br/><sub>Hiwonder: an articulated arm built from primitives</sub></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/contact.jpg" alt="Contact section" /><br/><sub><b>04 Contact</b>: pill links and the CV download</sub></td>
+    <td><img src="docs/screenshots/contact.jpg" alt="Contact section" /><br/><sub><b>04 Contact</b>: the Moon, signal rings and a small bouquet</sub></td>
     <td><img src="docs/screenshots/menu.jpg" alt="Full-screen menu overlay" /><br/><sub>Full-screen menu with numbered links and theme toggle</sub></td>
   </tr>
 </table>
@@ -65,7 +67,9 @@ section is a split screen, with a 3D visual on one side and a short explanation 
 - **One shared WebGL canvas.** Each section's image slot is a drei `<View>`, so every scene renders into a single GPU context, clipped to its box.
 - **Cutout shader.** Each photo is a plane at its natural aspect ratio. A custom shader draws an alpha-edge outline (white, or orange on hover) and a soft drop shadow; a contact shadow sits underneath.
 - **Alive but calm.** Figures float, tilt toward the cursor (or follow device orientation on phones) and scale up slightly on hover. The camera glides with scroll through GSAP ScrollTrigger, and Lenis smooths the scroll.
-- **Generated project visuals.** A globe, a rover, a robot arm and a typing terminal, all built from primitives, so there are no heavy models to download.
+- **A procedural cosmos.** The sun has an animated plasma shader and a soft corona. The planets' textures (Earth's continents and clouds, Jupiter's bands, Saturn's rings, the Moon's craters) are generated in code from noise, so there are no image downloads. The planets are lit by the sun, so each shows a day and a night side.
+- **Flowers, sparingly.** Hand-built 3D blossoms with cupped, curled petals, drifting petals in About and Contact, and a line-drawn flower in the footer.
+- **Generated project visuals.** An Earth with connection arcs, a rover, a robot arm and a typing terminal, all built from primitives, so there are no heavy models to download.
 - **Fast first paint.** three.js loads only after the first interaction, and each scene is built only as its section approaches. Until then, a static cutout with a CSS float stands in.
 - **Accessible.** Semantic landmarks, keyboard-operable tabs (arrow keys) and menu (focus trap, `Esc` closes), visible focus states, and `prefers-reduced-motion` support. Without WebGL, static images are shown instead.
 - **Editable content.** All copy lives in one file, and all images are mapped in another.
@@ -75,7 +79,7 @@ section is a split screen, with a 3D visual on one side and a short explanation 
 | Area | Tools |
 | --- | --- |
 | Framework | Next.js 16 (App Router), React 19, TypeScript |
-| Styling | Tailwind CSS 4, `next/font` (Inter Tight + JetBrains Mono) |
+| Styling | Tailwind CSS 4, `next/font` (Playfair Display headlines, Inter Tight body, JetBrains Mono labels) |
 | 3D | three.js, @react-three/fiber, @react-three/drei |
 | Motion | GSAP + ScrollTrigger, Lenis, framer-motion |
 | Hosting | Vercel (fully static output) |
@@ -161,8 +165,11 @@ src/
 │     ├─ ViewSlot       anchors a scene to a section's slot
 │     ├─ SlotScene      picks the scene per section
 │     ├─ CutoutFigure   reusable 3D cutout (outline + shadow shader)
-│     ├─ Scene          studio lights, shapes, signal rings, fiber lines
-│     └─ visuals        globe, rover, robot arm, terminal, code window
+│     ├─ Scene          studio lights, parallax, signal rings, fiber lines
+│     ├─ cosmos         sun, planets, Earth, satellite, starfield, solar system
+│     ├─ flowers        blossoms, bouquet, drifting petals
+│     ├─ textures       procedural planet, cloud, ring and glow textures
+│     └─ visuals        Earth globe, rover, robot arm, terminal, code window
 └─ lib/                 stores, hooks, scroll, GSAP setup, image resolver
 public/
 ├─ images/              cutouts (+ optional projects/ screenshots)
@@ -175,8 +182,8 @@ Lighthouse on the production build, run locally:
 
 | | Performance | Accessibility | Best Practices | SEO |
 | --- | --- | --- | --- | --- |
-| Desktop | 95–96 | 100 | 100 | 100 |
-| Mobile (simulated slow 4G) | ~70 | 100 | 100 | 100 |
+| Desktop | 93–96 | 100 | 100 | 100 |
+| Mobile (simulated slow 4G) | ~67–70 | 100 | 100 | 100 |
 
 On mobile, Lighthouse's simulated throttling counts the JavaScript for the intro loader and animations against
 the first paint. A direct 4× CPU-throttled measurement painted the hero at about 1.3 s.

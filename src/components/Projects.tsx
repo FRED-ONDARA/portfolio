@@ -37,7 +37,7 @@ function ProjectRow({ index, screenshot }: { index: number; screenshot?: string 
         </div>
         <h3
           id={`project-${p.slug}`}
-          className="mt-5 text-[clamp(2rem,3.6vw,3.25rem)] leading-[1] font-semibold tracking-[-0.04em]"
+          className="mt-5 text-[clamp(2rem,3.6vw,3.25rem)] leading-[1] font-display font-medium tracking-[-0.02em]"
         >
           <MaskLine>{p.title}</MaskLine>
         </h3>
@@ -74,10 +74,10 @@ export function Projects({ screenshots }: { screenshots: Partial<Record<ProjectS
         <SectionLabel number={projects.number} label={projects.label} />
         <h2
           id="projects-title"
-          className="mt-6 text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.95] font-semibold tracking-[-0.04em]"
+          className="mt-6 text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.95] font-display font-medium tracking-[-0.02em]"
         >
           {projects.heading.map((l, i) => (
-            <MaskLine key={l} className={i === 1 ? "text-accent-display" : ""}>
+            <MaskLine key={l} className={i === 1 ? "text-accent-display italic" : ""}>
               {l}
             </MaskLine>
           ))}

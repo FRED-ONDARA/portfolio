@@ -2,21 +2,42 @@
 
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Line, RoundedBox } from "@react-three/drei";
+import { Line } from "@react-three/drei";
 import * as THREE from "three";
 import { pointer } from "@/lib/store";
 import { ACCENT, type ScenePalette } from "./palette";
 
 // Shared studio lighting: key, soft fill and a rim light from behind.
-export function StudioLights() {
+// `dim` lowers it so a scene's own light (the sun) shapes the planets' day and night sides.
+export function StudioLights({ dim = false }: { dim?: boolean }) {
   return (
     <>
-      <ambientLight intensity={0.75} />
-      <directionalLight position={[3, 4, 5]} intensity={1.7} />
-      <directionalLight position={[-4, 1, 3]} intensity={0.45} />
-      <directionalLight position={[0, 3, -5]} intensity={1.1} />
+      <ambientLight intensity={dim ? 0.22 : 0.75} />
+      <directionalLight position={[3, 4, 5]} intensity={dim ? 0.35 : 1.7} />
+      <directionalLight position={[-4, 1, 3]} intensity={dim ? 0.1 : 0.45} />
+      <directionalLight position={[0, 3, -5]} intensity={dim ? 0.4 : 1.1} />
     </>
   );
+}
+
+/** Drifts its children against the pointer, so background layers sit "behind" the figure. */
+export function Parallax({
+  amount = 0.18,
+  reduced,
+  children,
+}: {
+  amount?: number;
+  reduced: boolean;
+  children: React.ReactNode;
+}) {
+  const group = useRef<THREE.Group>(null);
+  useFrame((_, dt) => {
+    const g = group.current;
+    if (!g || reduced) return;
+    g.position.x = THREE.MathUtils.damp(g.position.x, -pointer.x * amount, 3, dt);
+    g.position.y = THREE.MathUtils.damp(g.position.y, -pointer.y * amount * 0.6, 3, dt);
+  });
+  return <group ref={group}>{children}</group>;
 }
 
 let blobTexture: THREE.CanvasTexture | null = null;
@@ -49,73 +70,6 @@ export function ContactBlob({
       <planeGeometry args={[width, depth]} />
       <meshBasicMaterial map={texture} transparent opacity={opacity} depthWrite={false} toneMapped={false} />
     </mesh>
-  );
-}
-
-type ShapeProps = { palette: ScenePalette; reduced: boolean; count?: number; parallax?: number };
-
-// A few quiet background objects: rounded cubes, thin rings, a sphere. One orange piece.
-export function BackgroundShapes({ palette, reduced, count = 5, parallax = 0.18 }: ShapeProps) {
-  const group = useRef<THREE.Group>(null);
-  const items = useRef<THREE.Object3D[]>([]);
-
-  useFrame((state, dt) => {
-    if (!group.current) return;
-    const t = state.clock.elapsedTime;
-    if (!reduced) {
-      // Opposite drift to the figure for a subtle depth effect.
-      group.current.position.x = THREE.MathUtils.damp(group.current.position.x, -pointer.x * parallax, 3, dt);
-      group.current.position.y = THREE.MathUtils.damp(group.current.position.y, -pointer.y * parallax * 0.6, 3, dt);
-      items.current.forEach((o, i) => {
-        if (!o) return;
-        o.rotation.x += dt * 0.08 * (i % 2 ? 1 : -1);
-        o.rotation.y += dt * 0.12;
-        o.position.y = (o.userData.y as number) + Math.sin(t * 0.6 + i) * 0.06;
-      });
-    }
-  });
-
-  const set = (i: number) => (o: THREE.Object3D | null) => {
-    if (o) {
-      o.userData.y = o.position.y;
-      items.current[i] = o;
-    }
-  };
-
-  return (
-    <group ref={group}>
-      <RoundedBox ref={set(0)} args={[0.62, 0.62, 0.62]} radius={0.12} smoothness={4} position={[-1.55, 1.05, -1.6]}>
-        <meshStandardMaterial color={palette.solid} roughness={0.85} />
-      </RoundedBox>
-      <mesh ref={set(1)} position={[1.45, 1.3, -1.1]}>
-        <sphereGeometry args={[0.2, 32, 32]} />
-        <meshStandardMaterial color={ACCENT} roughness={0.4} />
-      </mesh>
-      {count > 2 && (
-        <mesh ref={set(2)} position={[1.5, -0.55, -1.8]} rotation={[1.1, 0.3, 0]}>
-          <torusGeometry args={[0.55, 0.012, 16, 96]} />
-          <meshStandardMaterial color={palette.ink} roughness={0.5} />
-        </mesh>
-      )}
-      {count > 3 && (
-        <RoundedBox ref={set(3)} args={[0.42, 0.42, 0.42]} radius={0.1} smoothness={4} position={[-1.3, -1.0, -0.6]}>
-          <meshPhysicalMaterial
-            color={palette.glass}
-            roughness={0.25}
-            clearcoat={1}
-            clearcoatRoughness={0.4}
-            transparent
-            opacity={0.55}
-          />
-        </RoundedBox>
-      )}
-      {count > 4 && (
-        <mesh ref={set(4)} position={[-0.9, 1.6, -2.4]} rotation={[0.4, 0.9, 0]}>
-          <torusGeometry args={[0.32, 0.01, 16, 64]} />
-          <meshStandardMaterial color={palette.soft} roughness={0.6} />
-        </mesh>
-      )}
-    </group>
   );
 }
 

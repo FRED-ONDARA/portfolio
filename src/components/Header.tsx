@@ -22,7 +22,7 @@ export function Header() {
               scrollToId("top");
             }}
             aria-label={`${site.name}, back to top`}
-            className="grid h-10 w-10 place-items-center rounded-full bg-ink text-[13px] font-semibold tracking-[-0.04em] text-bg"
+            className="grid h-10 w-10 place-items-center rounded-full bg-ink text-[13px] font-display font-medium tracking-[-0.02em] text-bg"
           >
             {site.initials}
           </a>

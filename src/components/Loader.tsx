@@ -57,7 +57,7 @@ export function Loader() {
           </div>
           <div className="flex items-end justify-between gap-6">
             <span className="font-mono text-[13px] tracking-[0.2em] md:text-[15px]">{site.loader.label}</span>
-            <span className="text-[clamp(5rem,18vw,15rem)] leading-[0.8] font-semibold tracking-[-0.06em] tabular-nums">
+            <span className="text-[clamp(5rem,18vw,15rem)] leading-[0.8] font-display font-medium tracking-[-0.03em] [font-variant-numeric:lining-nums_tabular-nums]">
               <span ref={counter}>0</span>
               <span className="text-accent">%</span>
             </span>

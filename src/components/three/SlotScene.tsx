@@ -9,7 +9,9 @@ import { pointer, qualityStore, themeStore, useStore } from "@/lib/store";
 import type { VisualSpec } from "../visual-spec";
 import { CutoutFigure, type FigureState } from "./CutoutFigure";
 import { scenePalette } from "./palette";
-import { BackgroundShapes, FiberLines, SignalRings, StudioLights } from "./Scene";
+import { EarthOrbit, Planet, SolarSystem, Starfield } from "./cosmos";
+import { Bouquet, Flower, FloatingPetals } from "./flowers";
+import { FiberLines, Parallax, SignalRings, StudioLights } from "./Scene";
 import { CodeWindow, Globe, RobotArm, Rover, ScreenshotPlane, TerminalWindow } from "./visuals";
 
 export type SlotState = FigureState & { progress: number };
@@ -112,7 +114,7 @@ export function SlotScene({
   const quality = useStore(qualityStore, "high");
   const palette = scenePalette(theme);
   const low = quality === "low" || mobile;
-  const shapeCount = low ? 2 : 5;
+  const stars = low ? 60 : 150;
 
   const isProject = spec.kind === "project";
   const distance = isProject ? 7.2 : 8.4;
@@ -122,9 +124,12 @@ export function SlotScene({
     case "hero":
       content = (
         <>
-          <BackgroundShapes palette={palette} reduced={reduced} count={shapeCount} />
-          <SignalRings reduced={reduced} position={[0, 0.3, -1.4]} />
-          {!low && <FiberLines palette={palette} reduced={reduced} />}
+          <Starfield palette={palette} count={stars} z={-6} spread={[9, 7, 3]} />
+          <Parallax amount={0.22} reduced={reduced}>
+            <group position={[-0.2, 1.3, -3.2]} rotation={[0.5, 0, -0.22]} scale={0.66}>
+              <SolarSystem reduced={reduced} palette={palette} low={low} />
+            </group>
+          </Parallax>
           <CutoutFigure src={spec.figure.src} state={state} reduced={reduced} quality={quality} />
         </>
       );
@@ -132,7 +137,22 @@ export function SlotScene({
     case "about":
       content = (
         <>
-          <BackgroundShapes palette={palette} reduced={reduced} count={Math.min(shapeCount, 3)} parallax={0.14} />
+          <Starfield palette={palette} count={Math.round(stars * 0.6)} z={-5} />
+          <Parallax amount={0.16} reduced={reduced}>
+            <group position={[1.2, 1.2, -2.4]}>
+              <Planet kind="saturn" radius={0.4} rings reduced={reduced} tilt={0.35} />
+            </group>
+            <group position={[-1.45, 1.55, -2.8]}>
+              <Planet kind="moon" radius={0.16} reduced={reduced} textureSize={128} />
+            </group>
+          </Parallax>
+          <group position={[-1.05, -1.25, 0.35]} rotation={[0, 0.25, 0.18]}>
+            <Flower tone="ivory" size={0.75} stem={1.0} lean={0.3} reduced={reduced} />
+          </group>
+          <group position={[-0.72, -1.62, 0.5]} rotation={[0, -0.2, -0.12]}>
+            <Flower tone="blush" size={0.55} stem={0.7} lean={-0.2} sway={1.7} reduced={reduced} />
+          </group>
+          <FloatingPetals count={low ? 6 : 12} reduced={reduced} />
           <CutoutFigure src={spec.figure.src} state={state} reduced={reduced} quality={quality} />
         </>
       );
@@ -140,19 +160,35 @@ export function SlotScene({
     case "focus":
       content = (
         <>
+          <Starfield palette={palette} count={Math.round(stars * 0.6)} z={-5} />
           <Swap show={spec.active === "telecom"} reduced={reduced}>
-            <SignalRings reduced={reduced} position={[0, 0.3, -1.4]} />
+            <SignalRings reduced={reduced} position={[0.2, 0.3, -1.4]} />
             {!low && <FiberLines palette={palette} reduced={reduced} />}
+            <Parallax amount={0.16} reduced={reduced}>
+              <group position={[-1.15, 0.95, -2.3]} scale={0.85}>
+                <EarthOrbit reduced={reduced} palette={palette} />
+              </group>
+            </Parallax>
           </Swap>
           <Swap show={spec.active === "robotics"} reduced={reduced}>
             <group position={[-1.25, -0.25, -1.2]}>
               <RobotArm palette={palette} reduced={reduced} scale={0.62} float={false} />
             </group>
+            <Parallax amount={0.16} reduced={reduced}>
+              <group position={[1.35, 1.4, -2.6]}>
+                <Planet kind="mars" radius={0.36} reduced={reduced} />
+              </group>
+            </Parallax>
           </Swap>
           <Swap show={spec.active === "web"} reduced={reduced}>
             <group position={[-0.9, 0.55, -1.6]} rotation={[0, 0.35, 0]} scale={0.85}>
               <CodeWindow palette={palette} reduced={reduced} theme={theme} />
             </group>
+            <Parallax amount={0.16} reduced={reduced}>
+              <group position={[1.4, 1.5, -2.8]}>
+                <Planet kind="jupiter" radius={0.34} reduced={reduced} tilt={0.05} />
+              </group>
+            </Parallax>
           </Swap>
           <FocusFigures spec={spec} state={state} reduced={reduced} quality={quality} />
         </>
@@ -174,6 +210,7 @@ export function SlotScene({
     case "contact":
       content = (
         <>
+          <Starfield palette={palette} count={Math.round(stars * 0.6)} z={-5} />
           <SignalRings
             count={4}
             speed={0.38}
@@ -182,7 +219,15 @@ export function SlotScene({
             reduced={reduced}
             position={[0, 0.5, -1.2]}
           />
-          <BackgroundShapes palette={palette} reduced={reduced} count={2} parallax={0.12} />
+          <Parallax amount={0.16} reduced={reduced}>
+            <group position={[-1.35, 1.35, -2.4]}>
+              <Planet kind="moon" radius={0.3} reduced={reduced} textureSize={256} spin={0.05} />
+            </group>
+          </Parallax>
+          <group position={[1.15, -1.45, 0.45]} rotation={[0, -0.3, -0.1]}>
+            <Bouquet reduced={reduced} scale={0.62} />
+          </group>
+          <FloatingPetals count={low ? 6 : 12} reduced={reduced} />
           <CutoutFigure src={spec.figure.src} state={state} reduced={reduced} quality={quality} />
         </>
       );
@@ -193,7 +238,7 @@ export function SlotScene({
     <>
       <PerspectiveCamera makeDefault fov={30} position={[0, 0.15, distance]} near={0.1} far={50} />
       <CameraRig state={state} reduced={reduced} distance={distance} />
-      <StudioLights />
+      <StudioLights dim={spec.kind === "hero"} />
       <Suspense fallback={null}>
         {content}
         <Ready onReady={onReady} />

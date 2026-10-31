@@ -74,7 +74,7 @@ export function MenuOverlay({ returnFocusTo }: { returnFocusTo: React.RefObject<
         >
           <div className={`${container} flex h-16 items-center justify-between md:h-20`}>
             <span
-              className="grid h-10 w-10 place-items-center rounded-full bg-ink text-[13px] font-semibold tracking-[-0.04em] text-bg"
+              className="grid h-10 w-10 place-items-center rounded-full bg-ink text-[13px] font-display font-medium tracking-[-0.02em] text-bg"
               aria-hidden
             >
               {site.initials}
@@ -114,7 +114,7 @@ export function MenuOverlay({ returnFocusTo }: { returnFocusTo: React.RefObject<
                     className="group flex items-baseline gap-5 py-4 md:gap-8 md:py-5"
                   >
                     <span className="font-mono text-[12px] text-accent-text md:text-[13px]">0{i + 1}</span>
-                    <span className="text-[clamp(2.6rem,8vw,6.5rem)] leading-[0.95] font-semibold tracking-[-0.045em] transition-[color,transform] duration-500 group-hover:translate-x-3 group-hover:text-accent-display">
+                    <span className="text-[clamp(2.6rem,8vw,6.5rem)] leading-[0.95] font-display font-medium tracking-[-0.02em] transition-[color,transform] duration-500 group-hover:translate-x-3 group-hover:text-accent-display">
                       {item.label}
                     </span>
                   </motion.a>

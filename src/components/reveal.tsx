@@ -8,7 +8,7 @@ import { loaderDoneStore, useStore } from "@/lib/store";
 /** One masked line of a headline; slides up from behind its mask. */
 export function MaskLine({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <span data-reveal="line" className={`block overflow-hidden pb-[0.08em] ${className}`}>
+    <span data-reveal="line" className={`block overflow-hidden pr-[0.12em] pb-[0.14em] ${className}`}>
       <span className="block will-change-transform">{children}</span>
     </span>
   );

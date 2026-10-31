@@ -41,6 +41,7 @@
   --color-accent-text: var(--accent-text);
   --color-on-accent: var(--on-accent);
   --font-sans: var(--font-inter-tight);
+  --font-display: var(--font-playfair), Georgia, serif;
   --font-mono: var(--font-jetbrains-mono);
   --radius-ui: 999px;
   --radius-card: 14px;

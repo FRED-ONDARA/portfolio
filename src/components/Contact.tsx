@@ -23,10 +23,10 @@ export function Contact({ figure }: { figure: ResolvedImage }) {
           <SectionLabel number={contact.number} label={contact.label} />
           <h2
             id="contact-title"
-            className="mt-6 text-[clamp(3rem,8vw,7.5rem)] leading-[0.9] font-semibold tracking-[-0.045em]"
+            className="mt-6 text-[clamp(3rem,8vw,7.5rem)] leading-[0.9] font-display font-medium tracking-[-0.02em]"
           >
             {contact.heading.map((l, i) => (
-              <MaskLine key={l} className={i === 1 ? "text-accent-display" : ""}>
+              <MaskLine key={l} className={i === 1 ? "text-accent-display italic" : ""}>
                 {l}
               </MaskLine>
             ))}
