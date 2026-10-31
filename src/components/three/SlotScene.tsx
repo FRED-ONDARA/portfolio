@@ -9,7 +9,10 @@ import { pointer, qualityStore, themeStore, useStore } from "@/lib/store";
 import type { VisualSpec } from "../visual-spec";
 import { CutoutFigure, type FigureState } from "./CutoutFigure";
 import { scenePalette } from "./palette";
+import { site } from "@/content/site";
+import { toolLogos } from "@/content/logos";
 import { Aura, FiberBundle, SignalFloor } from "./backdrops";
+import { Emblem } from "./Emblem";
 import { SolarSystem, Starfield } from "./cosmos";
 import { Bouquet, Flower } from "./flowers";
 import { Parallax, StudioLights } from "./Scene";
@@ -183,6 +186,21 @@ export function SlotScene({
         <RobotArm palette={palette} reduced={reduced} />
       ) : (
         <TerminalWindow palette={palette} reduced={reduced} />
+      );
+      break;
+    case "tools":
+      content = (
+        <>
+          <Aura theme={theme} reduced={reduced} seed={2.6} position={[0, 0.25, -2.1]} />
+          <SignalFloor theme={theme} reduced={reduced} y={-1.5} amp={0.07} />
+          {site.skills.ai.map((tool) => (
+            <Swap key={tool.id} show={spec.active === tool.id} reduced={reduced}>
+              <group position={[0, 0.25, 0]}>
+                <Emblem logo={toolLogos[tool.logo]} ink={palette.ink} reduced={reduced} />
+              </group>
+            </Swap>
+          ))}
+        </>
       );
       break;
     case "contact":

@@ -8,6 +8,8 @@ import { Button, container } from "./ui";
 import { Visual } from "./Visual";
 
 const { hero, cv } = site;
+// The greeting is written out in full in site.ts; the name inside it is set in italics.
+const [greetingBefore, greetingAfter = ""] = hero.greeting.split(site.name);
 
 export function Hero({ figure }: { figure: ResolvedImage }) {
   const ref = useReveal<HTMLElement>({ immediate: true });
@@ -23,9 +25,14 @@ export function Hero({ figure }: { figure: ResolvedImage }) {
         <p data-reveal="fade" className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted sm:text-[12px]">
           {hero.label}
         </p>
+        <p data-reveal="fade" className="mt-5 font-display text-[clamp(1.35rem,2.1vw,1.9rem)] leading-tight text-ink">
+          {greetingBefore}
+          <span className="italic">{site.name}</span>
+          {greetingAfter}
+        </p>
         <h1
           id="hero-title"
-          className="mt-6 text-[clamp(3.2rem,9vw,8.4rem)] leading-[0.95] font-display font-medium tracking-[-0.02em]"
+          className="mt-3 text-[clamp(3rem,8vw,7.2rem)] leading-[0.95] font-display font-medium tracking-[-0.02em]"
         >
           {hero.headline.map((line, i) => (
             <MaskLine key={line.text} className={i === 1 ? "pl-[0.9em]" : i === 2 ? "pl-[0.35em]" : ""}>
@@ -53,6 +60,17 @@ export function Hero({ figure }: { figure: ResolvedImage }) {
             {hero.secondaryCta}
           </Button>
         </div>
+        <dl
+          data-reveal="fade"
+          className="mt-10 grid max-w-[40rem] grid-cols-1 gap-4 border-t border-line pt-6 sm:grid-cols-3"
+        >
+          {hero.facts.map((f) => (
+            <div key={f.value} className="flex flex-col gap-1">
+              <dt className="font-display text-xl leading-none">{f.value}</dt>
+              <dd className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-muted">{f.label}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
       <Visual
         spec={{ kind: "hero", figure }}

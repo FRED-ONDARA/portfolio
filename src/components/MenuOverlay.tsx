@@ -66,7 +66,7 @@ export function MenuOverlay({ returnFocusTo }: { returnFocusTo: React.RefObject<
           role="dialog"
           aria-modal="true"
           aria-label="Site menu"
-          className="fixed inset-0 z-50 flex flex-col bg-bg"
+          className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-bg"
           initial={reduced ? { opacity: 0 } : { clipPath: "inset(0 0 100% 0)" }}
           animate={reduced ? { opacity: 1 } : { clipPath: "inset(0 0 0% 0)" }}
           exit={reduced ? { opacity: 0 } : { clipPath: "inset(100% 0 0 0)" }}
@@ -111,10 +111,10 @@ export function MenuOverlay({ returnFocusTo }: { returnFocusTo: React.RefObject<
                     initial={reduced ? false : { y: "100%" }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: reduced ? 0 : 0.25 + i * 0.06 }}
-                    className="group flex items-baseline gap-5 py-4 md:gap-8 md:py-5"
+                    className="group flex items-baseline gap-5 py-3 md:gap-8 md:py-3"
                   >
                     <span className="font-mono text-[12px] text-accent-text md:text-[13px]">0{i + 1}</span>
-                    <span className="text-[clamp(2.6rem,8vw,6.5rem)] leading-[0.95] font-display font-medium tracking-[-0.02em] transition-[color,transform] duration-500 group-hover:translate-x-3 group-hover:text-accent-display">
+                    <span className="text-[clamp(2.2rem,min(7vw,8.5vh),5rem)] leading-[0.95] font-display font-medium tracking-[-0.02em] transition-[color,transform] duration-500 group-hover:translate-x-3 group-hover:text-accent-display">
                       {item.label}
                     </span>
                   </motion.a>

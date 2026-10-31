@@ -34,6 +34,9 @@ export function About({ figure }: { figure: ResolvedImage }) {
           <p data-reveal="fade" className="mt-8 max-w-[36rem] text-[17px] leading-relaxed text-ink/80">
             {about.body}
           </p>
+          <p data-reveal="fade" className="mt-4 max-w-[36rem] text-[17px] leading-relaxed text-ink/80">
+            {about.more}
+          </p>
           <ul className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-[14px] border border-line bg-line sm:grid-cols-2">
             {about.facts.map((f, i) => (
               <li key={f.title} data-reveal="fade" className="flex flex-col gap-3 bg-surface p-5">
@@ -44,6 +47,14 @@ export function About({ figure }: { figure: ResolvedImage }) {
               </li>
             ))}
           </ul>
+          <dl data-reveal="fade" className="mt-8 divide-y divide-line border-y border-line">
+            {about.glance.map((g) => (
+              <div key={g.label} className="grid grid-cols-[7.5rem_1fr] gap-4 py-3 text-[15px]">
+                <dt className="font-mono text-[11px] uppercase leading-6 tracking-[0.12em] text-muted">{g.label}</dt>
+                <dd className="text-ink">{g.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>

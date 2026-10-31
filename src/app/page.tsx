@@ -1,12 +1,16 @@
 import { About } from "@/components/About";
 import { Contact } from "@/components/Contact";
+import { ClientChrome } from "@/components/ClientChrome";
 import { Experience } from "@/components/Experience";
 import { Focus } from "@/components/Focus";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Loader } from "@/components/Loader";
+import { Marquee } from "@/components/Marquee";
 import { Projects } from "@/components/Projects";
+import { Skills } from "@/components/Skills";
+import { SkillsToolkit } from "@/components/SkillsToolkit";
 import { resolveImages } from "@/lib/images";
 
 export default function Home() {
@@ -18,6 +22,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero figure={cutouts.hero} />
+        <Marquee />
         <About figure={cutouts.about} />
         <Focus
           figures={{
@@ -26,11 +31,15 @@ export default function Home() {
             web: cutouts["focus-web"],
           }}
         />
+        <Skills>
+          <SkillsToolkit />
+        </Skills>
+        <Experience />
         <Projects screenshots={screenshots} />
         <Contact figure={cutouts.contact} />
       </main>
       <Footer />
-      <Experience />
+      <ClientChrome />
     </>
   );
 }

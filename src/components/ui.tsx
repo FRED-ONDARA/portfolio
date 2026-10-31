@@ -80,3 +80,12 @@ export function SectionLabel({ number, label }: { number: string; label: string 
 }
 
 export const container = "mx-auto w-full max-w-[1440px] px-4 sm:px-6 md:px-10";
+
+/** One masked line of a headline; slides up from behind its mask. */
+export function MaskLine({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <span data-reveal="line" className={`block overflow-hidden pr-[0.12em] pb-[0.14em] ${className}`}>
+      <span className="block will-change-transform">{children}</span>
+    </span>
+  );
+}

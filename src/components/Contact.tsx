@@ -35,6 +35,14 @@ export function Contact({ figure }: { figure: ResolvedImage }) {
           <p data-reveal="fade" className="mt-8 max-w-[32rem] text-[17px] leading-relaxed text-ink/80">
             {contact.line}
           </p>
+          <dl data-reveal="fade" className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
+            {contact.details.map((d) => (
+              <div key={d.label} className="flex flex-col gap-1">
+                <dt className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-muted">{d.label}</dt>
+                <dd className="text-[15px] text-ink">{d.value}</dd>
+              </div>
+            ))}
+          </dl>
           <div data-reveal="fade" className="mt-10 flex flex-wrap items-center gap-3">
             <ul className="flex flex-wrap gap-3" aria-label="Contact links">
               {contact.links.map((l) => {

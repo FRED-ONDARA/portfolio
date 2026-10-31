@@ -46,14 +46,22 @@ split screen, with a 3D visual on one side and a short explanation on the other.
   </tr>
   <tr>
     <td><img src="docs/screenshots/focus.jpg" alt="Focus section with tabs" /><br/><sub><b>02 Focus</b>: tabs swap the copy, the figure and the 3D object (fiber strands, robot arm, code window)</sub></td>
-    <td><img src="docs/screenshots/projects.jpg" alt="Globyx project with a wireframe globe" /><br/><sub><b>03 Projects</b>: Globyx, shown as a realistic Earth with connection arcs</sub></td>
+    <td><img src="docs/screenshots/projects.jpg" alt="Globyx project with a wireframe globe" /><br/><sub><b>05 Projects</b>: Globyx, shown as a realistic Earth with connection arcs</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/skills-claude-code.jpg" alt="Skills section with a 3D Claude logo" /><br/><sub><b>03 Skills</b>: each AI tool gets a floating 3D logo and an explanation</sub></td>
+    <td><img src="docs/screenshots/skills-jules.jpg" alt="Skills section with a 3D Jules logo" /><br/><sub>The logo changes as you scroll through the tools</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/skills-toolkit.jpg" alt="Toolkit grid and how I work steps" /><br/><sub>Toolkit from the CV, with real logos, and four "how I work" steps</sub></td>
+    <td><img src="docs/screenshots/experience.jpg" alt="Experience timeline" /><br/><sub><b>04 Experience</b>: roles, education, certifications</sub></td>
   </tr>
   <tr>
     <td><img src="docs/screenshots/project-robot.jpg" alt="Wheeled robot following a glowing path" /><br/><sub>MATLAB–CoppeliaSim: a rover following a glowing path</sub></td>
     <td><img src="docs/screenshots/project-arm.jpg" alt="Articulated robot arm" /><br/><sub>Hiwonder: an articulated arm built from primitives</sub></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/contact.jpg" alt="Contact section" /><br/><sub><b>04 Contact</b>: brand-icon links, CV download and a small bouquet</sub></td>
+    <td><img src="docs/screenshots/contact.jpg" alt="Contact section" /><br/><sub><b>06 Contact</b>: brand-icon links, CV download and a small bouquet</sub></td>
     <td><img src="docs/screenshots/menu.jpg" alt="Full-screen menu overlay" /><br/><sub>Full-screen menu with numbered links and theme toggle</sub></td>
   </tr>
 </table>
@@ -74,6 +82,8 @@ split screen, with a 3D visual on one side and a short explanation on the other.
 - **A procedural solar system in the hero.** The sun has an animated plasma shader and a soft corona. The planet textures are generated in code, and the planets are lit by the sun, so each shows a day and a night side.
 - **Flowers, sparingly.** Hand-built 3D blossoms with cupped, curled petals in About and Contact, plus a line-drawn flower in the footer.
 - **Real brand icons** for Gmail, WhatsApp, LinkedIn and GitHub, each filling with its brand colour on hover.
+- **3D tool logos.** In the Skills section, the logos of Claude Code, Claude Fable 5.1, Google Antigravity, Jules and GPT-6 Astra are extruded from their SVG outlines into glossy, bevelled solids. The pinned logo swaps as you scroll through each tool's explanation.
+- **Self-explanatory content.** A greeting with my name, quick facts, a scrolling band of tools, an "at a glance" block, a full toolkit, four "how I work" steps and an experience timeline, all drawn from my CV.
 - **Generated project visuals.** An Earth with connection arcs, a rover, a robot arm and a typing terminal, all built from primitives, so there are no heavy models to download.
 - **Fast first paint.** The initial page is about 500 KB. three.js loads only after the first interaction, and each scene is built only as its section approaches. 3D textures arrive as compressed WebP through Next's image optimizer (the contact cutout drops from 558 KB to 43 KB). Repeat visits in a session get a quick intro.
 - **Accessible.** Semantic landmarks, keyboard-operable tabs (arrow keys) and menu (focus trap, `Esc` closes), visible focus states, and `prefers-reduced-motion` support. Without WebGL, static images are shown instead.
@@ -162,9 +172,10 @@ src/
 ├─ app/                 layout, page, metadata, sitemap, robots, OG image, icon
 ├─ content/
 │  ├─ site.ts           ← all copy and links
-│  └─ images.ts         ← image mappings
+│  ├─ images.ts         ← image mappings
+│  └─ logos.ts          ← logo shapes for the Skills section (2D and 3D)
 ├─ components/
-│  ├─ Hero · About · Focus · Projects · Contact · Footer
+│  ├─ Hero · Marquee · About · Focus · Skills · Experience · Projects · Contact · Footer
 │  ├─ Header · MenuOverlay · Loader · Cursor · ThemeToggle
 │  ├─ Visual.tsx        section image slot (3D or static fallback)
 │  └─ three/
@@ -172,6 +183,7 @@ src/
 │     ├─ ViewSlot       anchors a scene to a section's slot
 │     ├─ SlotScene      picks the scene per section
 │     ├─ CutoutFigure   reusable 3D cutout (outline + shadow shader)
+│     ├─ Emblem         a logo outline extruded into a 3D solid
 │     ├─ Scene          studio lights, parallax, contact shadow
 │     ├─ backdrops      contour aura, signal floor, fiber bundle
 │     ├─ cosmos         sun, planets, Earth, starfield, solar system
@@ -184,14 +196,21 @@ public/
 └─ cv/                  CV PDFs
 ```
 
+## Logo credits
+
+Brand logos are used only to name the tools I work with. Claude, Anthropic, Google Jules, Gemini, Gmail, WhatsApp,
+GitHub and the toolkit marks come from [Simple Icons](https://simpleicons.org) (CC0). The OpenAI and LinkedIn marks
+come from [Font Awesome Free](https://fontawesome.com/license/free) (CC BY 4.0). The Antigravity emblem is an
+original design for this site, not Google's logo.
+
 ## Performance & accessibility
 
 Lighthouse on the production build, run locally:
 
 | | Performance | Accessibility | Best Practices | SEO |
 | --- | --- | --- | --- | --- |
-| Desktop | 93 | 100 | 100 | 100 |
-| Mobile (simulated slow 4G) | ~65–70 | 100 | 100 | 100 |
+| Desktop | 91–94 | 100 | 100 | 100 |
+| Mobile (simulated slow 4G) | ~64–70 | 100 | 100 | 100 |
 
 On mobile, Lighthouse's simulated throttling counts the JavaScript for the intro loader and animations against
 the first paint. A direct 4× CPU-throttled measurement painted the hero at about 1.3 s.

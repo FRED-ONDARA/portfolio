@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useIsMobile, useReducedMotion, useWebGL } from "@/lib/hooks";
 import { interactedStore, loaderDoneStore, useStore } from "@/lib/store";
+import { toolLogos } from "@/content/logos";
+import { site } from "@/content/site";
 import type { VisualSpec } from "./visual-spec";
 
 const ViewSlot = dynamic(() => import("./three/ViewSlot"), { ssr: false });
@@ -70,6 +72,22 @@ function Fallback({ spec, priority }: { spec: VisualSpec; priority?: boolean }) 
     case "focus": {
       return <StaticFigure src={spec.figures[spec.active].src} />;
     }
+    case "tools": {
+      const tool = site.skills.ai.find((t) => t.id === spec.active) ?? site.skills.ai[0];
+      const logo = toolLogos[tool.logo];
+      const dark = logo.color === "#0C0C0D" || logo.color === "#191919";
+      return (
+        <svg
+          viewBox={logo.viewBox}
+          className="figure-fallback absolute inset-[30%] h-[40%] w-[40%]"
+          style={{ color: dark ? "var(--ink)" : logo.color }}
+          fill="currentColor"
+          aria-hidden
+        >
+          <path d={logo.path} />
+        </svg>
+      );
+    }
     case "project":
       return spec.screenshot ? (
         <Image
@@ -93,6 +111,10 @@ function labelFor(spec: VisualSpec) {
       return spec.figures[spec.active].alt;
     case "project":
       return undefined;
+    case "tools": {
+      const tool = site.skills.ai.find((t) => t.id === spec.active) ?? site.skills.ai[0];
+      return `${tool.name} logo`;
+    }
     default:
       return spec.figure.alt;
   }

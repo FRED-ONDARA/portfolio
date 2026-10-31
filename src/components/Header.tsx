@@ -22,9 +22,17 @@ export function Header() {
               scrollToId("top");
             }}
             aria-label={`${site.name}, back to top`}
-            className="grid h-10 w-10 place-items-center rounded-full bg-ink text-[13px] font-display font-medium tracking-[-0.02em] text-bg"
+            className="group inline-flex items-center gap-3"
           >
-            {site.initials}
+            <span className="grid h-10 w-10 place-items-center rounded-full bg-ink text-[13px] font-display font-medium tracking-[-0.02em] text-bg">
+              {site.initials}
+            </span>
+            <span
+              aria-hidden
+              className="hidden rounded-full border border-line bg-surface/90 px-4 py-2 font-display text-lg leading-none backdrop-blur-md transition-colors group-hover:text-accent-text sm:inline"
+            >
+              {site.name}
+            </span>
           </a>
           <button
             ref={menuButton}

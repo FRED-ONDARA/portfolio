@@ -111,6 +111,15 @@ html.lenis body {
   filter: drop-shadow(0 0 1.5px #fff) drop-shadow(12px 16px 18px rgb(0 0 0 / 0.16));
 }
 
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 48s linear infinite;
+}
+
 @keyframes pulse-dot {
   0% {
     box-shadow: 0 0 0 0 rgb(255 87 16 / 0.55);
