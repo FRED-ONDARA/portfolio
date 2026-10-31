@@ -5,13 +5,15 @@
 **Electrical & Electronic Engineering student · Telecom, embedded systems & web**
 <br/>
 A minimalist, interactive 3D portfolio built with Next.js, React Three Fiber and GSAP.
+<br/>
+<b>Live: <a href="https://fredrickondara.vercel.app">fredrickondara.vercel.app</a></b>
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-0C0C0D?style=flat-square&logo=nextdotjs)](https://nextjs.org)
 [![React Three Fiber](https://img.shields.io/badge/React_Three_Fiber-9-0C0C0D?style=flat-square&logo=threedotjs)](https://r3f.docs.pmnd.rs)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-0C0C0D?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-0C0C0D?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
 [![GSAP](https://img.shields.io/badge/GSAP-ScrollTrigger-FF5710?style=flat-square&logo=greensock&logoColor=white)](https://gsap.com)
-[![Deploy with Vercel](https://img.shields.io/badge/Deploy-Vercel-0C0C0D?style=flat-square&logo=vercel)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FFRED-ONDARA%2Fportfolio)
+[![Live on Vercel](https://img.shields.io/badge/Live-fredrickondara.vercel.app-FF5710?style=flat-square&logo=vercel)](https://fredrickondara.vercel.app)
 
 <br/>
 
@@ -149,8 +151,9 @@ Replace the files and keep the same names, or change `site.cv` in `site.ts`.
 2. Go to [vercel.com/new](https://vercel.com/new), import `FRED-ONDARA/portfolio`, and keep the defaults (Next.js is detected automatically).
 3. Click **Deploy**. Later pushes to `main` redeploy automatically.
 
-The canonical URL, sitemap and Open Graph tags use Vercel's production domain automatically. If you use a custom
-domain, set `NEXT_PUBLIC_SITE_URL` (for example `https://fredrickondara.com`) in the Vercel project settings.
+The site is live at **https://fredrickondara.vercel.app**. `vercel.json` pins the framework to Next.js, and
+`NEXT_PUBLIC_SITE_URL` in the Vercel project settings sets the canonical URL, sitemap and Open Graph links. If you
+move to a custom domain later, update that variable.
 
 ## Project structure
 
