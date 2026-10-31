@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* Theme tokens. Light is the default; [data-theme="dark"] is set by the toggle. */
+:root,
+[data-theme="light"] {
+  --bg: #f5f3ef;
+  --surface: #ffffff;
+  --ink: #0c0c0d;
+  --muted: #6b6b70;
+  --line: rgb(12 12 13 / 0.12);
+  --accent: #ff5710;
+  /* Text-safe shades of the accent on the light canvas (WCAG AA):
+     display = large headings (3:1+), text = small labels (4.5:1+). */
+  --accent-display: #e84a06;
+  --accent-text: #c93c02;
+  --on-accent: #0c0c0d;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0c0c0d;
+  --surface: #151517;
+  --ink: #f5f3ef;
+  --muted: #9a9aa0;
+  --line: rgb(245 243 239 / 0.14);
+  --accent: #ff5710;
+  --accent-display: #ff5710;
+  --accent-text: #ff5710;
+  --on-accent: #0c0c0d;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-display: var(--accent-display);
+  --color-accent-text: var(--accent-text);
+  --color-on-accent: var(--on-accent);
+  --font-sans: var(--font-inter-tight);
+  --font-mono: var(--font-jetbrains-mono);
+  --radius-ui: 999px;
+  --radius-card: 14px;
+  --tracking-display: -0.04em;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-inter-tight), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Hidden only when JS is running, so content is never lost without it. */
+.js [data-reveal="line"] > span {
+  transform: translateY(110%);
+}
+.js [data-reveal="fade"] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+/* Static fallback for figures when WebGL is unavailable or still loading. */
+@keyframes figure-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.4deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0.4deg);
+  }
+}
+.figure-fallback {
+  animation: figure-float 6s ease-in-out infinite;
+  will-change: transform;
+  filter: drop-shadow(0 0 1.5px #fff) drop-shadow(12px 16px 18px rgb(0 0 0 / 0.16));
+}
+
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgb(255 87 16 / 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgb(255 87 16 / 0);
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 1.8s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (pointer: fine) {
+  .has-cursor,
+  .has-cursor * {
+    cursor: none !important;
+  }
+}
